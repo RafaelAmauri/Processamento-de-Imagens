@@ -1,57 +1,73 @@
+import os
+import numpy as np
+import sklearn.metrics
+import matplotlib.pyplot as plt
+
 from skimage.feature import graycomatrix, graycoprops
 from skimage import io
 from sklearn import svm
+from skimage.measure import shannon_entropy
+from sklearn.model_selection import train_test_split
 
-import os
-import numpy as np
-import matplotlib.pyplot as plt
+from PIL  import Image 
+import PIL  
+
+IMAGE_DIR = "./Imagens"
+TRAIN_SIZE = 75
 
 '''
-image = io.imread("Imagens/4/p_g_left_cc(12).png")
-
-GLCM = graycomatrix(image, [1], [0, np.pi/4, np.pi/2, 3*np.pi/4])
-
-print(graycoprops(GLCM, 'energy'))
+Returns two sets containing the training and testing sets, respectively
+@param train_size: an int from 0 to 100 indicating how much of the available
+data will be used for training
 '''
+def split_train_test(train_size:int):
+    train = []
+    test  = []
+    train_answers = []
+    test_answers  = []
 
-arquivos_1 = "./Imagens/1"
+    density_classes = ["1", "2", "3", "4"]#os.listdir(IMAGE_DIR)
+    for density_class in density_classes:
+        pictures = [file for file in os.listdir(f"{IMAGE_DIR}/{density_class}") if file.endswith('.png')]
+        tmp_train, tmp_test = train_test_split(pictures, train_size=train_size, shuffle=True)
 
-filelist = [file for file in os.listdir(arquivos_1) if file.endswith('.png')]
+        for i in tmp_train:
+            # Nao vamos mais importar a img assim, porque precisa mudar o numero de cinzas na imagem
+            #image       =  io.imread(f"{IMAGE_DIR}/{density_class}/{i}")
 
-features = []
-respostas = []
+            image        =  np.asarray(Image.open(f"{IMAGE_DIR}/{density_class}/{i}").quantize(32))
 
-for image in filelist:
-    image = io.imread(f"{arquivos_1}/{image}")
-    glcm = graycomatrix(image, [1], [0, np.pi/4, np.pi/2, 3*np.pi/4])
-    energy = graycoprops(glcm, 'energy')[0,0]
-    homo   = graycoprops(glcm, 'homogeneity')[0,0]
+            glcm        =  graycomatrix(image, [1], [0, np.pi/4, np.pi/2, 3*np.pi/4])
+            energy      =  graycoprops(glcm, 'energy')[0,0]
+            homogeneity =  graycoprops(glcm, 'homogeneity')[0,0]
+            #corr        =  graycoprops(glcm, 'correlation')[0,0]
+            entropy     =  shannon_entropy(image, base=2)
+            
 
-    features.append([energy * homo])
-    respostas.append("1")
+            train.append([energy, homogeneity, entropy, corr])
+            train_answers.append(f"{density_class}")
+        
+        for i in tmp_test:
+            image       =  io.imread(f"{IMAGE_DIR}/{density_class}/{i}")
+            glcm        =  graycomatrix(image, [1], [0, np.pi/4, np.pi/2, 3*np.pi/4])
+            energy      =  graycoprops(glcm, 'energy')[0,0]
+            homogeneity =  graycoprops(glcm, 'homogeneity')[0,0]
+            #corr        =  graycoprops(glcm, 'correlation')[0,0]
+            entropy     =  shannon_entropy(image, base=2)
 
-arquivos_2 = "./Imagens/2"
+            test.append([energy, homogeneity, entropy, corr])
+            test_answers.append(f"{density_class}")
 
-filelist = [file for file in os.listdir(arquivos_2) if file.endswith('.png')]
+    return train, test, train_answers, test_answers
 
-for image in filelist:
-    image = io.imread(f"{arquivos_2}/{image}")
-    glcm = graycomatrix(image, [1], [0, np.pi/4, np.pi/2, 3*np.pi/4])
-    energy = graycoprops(glcm, 'energy')[0,0]
-    homo   = graycoprops(glcm, 'homogeneity')[0,0]
+train, test, train_answers, test_answers = split_train_test(TRAIN_SIZE)
 
-    features.append([energy * homo])
-    respostas.append("2")
-
-#print(features)
-
+'''
+Vale a pena investigar se o modelo que é ruim
+'''
 clf = svm.SVC()
-clf.fit(features, respostas)
+clf.fit(train, train_answers)
 
-image_random = io.imread("random_1.png")
-glm = graycomatrix(image_random, [1], [0, np.pi/4, np.pi/2, 3*np.pi/4])
-energy = graycoprops(glm, 'energy')[0,0]
-homo   = graycoprops(glm, 'homogeneity')[0,0]
+prediction = clf.predict(test)
 
-#print(clf.predict(np.array(energy).reshape(-1, 1)))
-print(clf.predict(np.array(energy * homo).reshape(-1, 1)))
+print(sklearn.metrics.precision_score(test_answers, prediction, average='micro'))
