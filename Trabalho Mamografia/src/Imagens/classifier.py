@@ -54,13 +54,11 @@ def split_train_test(train_size:int, contrast_factor, sharpness_factor, color_fa
             glcm        =  graycomatrix(image, [1, 2, 4, 8, 16], [0, np.pi/8, np.pi/4, 3*np.pi/8, np.pi/2, 5*np.pi/8, 3*np.pi/4, 7*np.pi/8], levels=32)
             energy        =  graycoprops(glcm, 'energy')
             homogeneity   =  graycoprops(glcm, 'homogeneity')
-            asm           =  graycoprops(glcm, 'ASM')
             dissimilarity =  graycoprops(glcm, 'dissimilarity')
             correlation   =  graycoprops(glcm, 'correlation')
-            contrast      =  graycoprops(glcm, 'contrast')
             entropy       =  shannon_entropy(glcm, base=2)
 
-            tmp = np.concatenate((energy, homogeneity, entropy, correlation, dissimilarity, asm, contrast), axis=None)
+            tmp = np.concatenate((energy, homogeneity, entropy, correlation, dissimilarity), axis=None)
             train.append(tmp)
             train_answers.append(f"{density_class}")
         
@@ -81,13 +79,11 @@ def split_train_test(train_size:int, contrast_factor, sharpness_factor, color_fa
             glcm        =  graycomatrix(image, [1, 2, 4, 8, 16], [0, np.pi/8, np.pi/4, 3*np.pi/8, np.pi/2, 5*np.pi/8, 3*np.pi/4, 7*np.pi/8], levels=32)
             energy        =  graycoprops(glcm, 'energy')
             homogeneity   =  graycoprops(glcm, 'homogeneity')
-            asm           =  graycoprops(glcm, 'ASM')
             dissimilarity =  graycoprops(glcm, 'dissimilarity')
             correlation   =  graycoprops(glcm, 'correlation')
-            contrast      =  graycoprops(glcm, 'contrast')
             entropy       =  shannon_entropy(glcm, base=2)
 
-            tmp = np.concatenate((energy, homogeneity, entropy, correlation, dissimilarity, asm, contrast), axis=None)
+            tmp = np.concatenate((energy, homogeneity, entropy, correlation, dissimilarity), axis=None)
 
             test.append(tmp)
             test_answers.append(f"{density_class}")
@@ -99,33 +95,57 @@ valid_sharpness= []
 valid_color    = []
 valid_bright   = []
 
-'''
-for i in range(100, 500, 25):
+
+for i in range(0, 500, 25):
     valid_contrast.append(i/100)
     valid_sharpness.append(i/100)
     valid_color.append(i/100)
     valid_bright.append(i/100)
 
+top = []
+dict_top = {}
+VALORES_TOP = 15
+
 for i in valid_contrast:
     for j in valid_sharpness:
         for k in valid_color:
             for v in valid_bright:
-
                 print(f"contrast = {i} -- sharp = {j} -- color = {k} -- bright = {v}\n")
+                
+                medias_accuracia = np.array([], dtype=np.float64)
+
+                for l in range(0,5):
+                    train, test, train_answers, test_answers = split_train_test(TRAIN_SIZE, 1, 1, 1, 1)
+
+                    clf = svm.SVC(kernel="linear")
+                    clf.fit(train, train_answers)
+
+                    prediction = clf.predict(test)
+
+                    accuracy = sklearn.metrics.accuracy_score(test_answers, prediction)
+                    if accuracy not in medias_accuracia:
+                        medias_accuracia = np.append(medias_accuracia, accuracy)
+                    
+                medias_accuracia = medias_accuracia.mean()
+
+                if(len(top) < VALORES_TOP):
+                    top.append(medias_accuracia)
+                    dict_top[medias_accuracia] = f"contrast = {i} -- sharp = {j} -- color = {k} -- bright = {v}\n"
+                else:
+                    for j in range(0, VALORES_TOP-1):
+                        if i > top[j]:
+                            dict_top[top[j]] = f"contrast = {i} -- sharp = {j} -- color = {k} -- bright = {v}\n"
+                            top[j] = i
+                            top.sort()
+                            break
+
+                    print(f"Accuracy = {accuracy}")
+
+for i in dict_top:
+    print(f"{i} = {dict_top[i]}")
 '''
-train, test, train_answers, test_answers = split_train_test(TRAIN_SIZE, 1, 1, 3, 3)
-
-clf = svm.SVC(kernel="linear")
-clf.fit(train, train_answers)
-
-prediction = clf.predict(test)
-
-accuracy = sklearn.metrics.accuracy_score(test_answers, prediction)
-confusion_matrix = sklearn.metrics.confusion_matrix(test_answers, prediction)
-
-print(f"Accuracy = {accuracy}")
 print(f"Matriz de confusão = {confusion_matrix}")
-   
+
 plt.matshow(confusion_matrix, fignum="int")
 
 for (i, j), z in np.ndenumerate(confusion_matrix):
@@ -136,3 +156,4 @@ plt.text(0.5, -1, f"Accuracy = {accuracy}", ha='center', va='center', fontsize=1
             bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3'))
 
 plt.show()
+'''
