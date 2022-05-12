@@ -9,7 +9,7 @@ from sklearn import svm
 from skimage.measure import shannon_entropy
 from sklearn.model_selection import train_test_split
 
-from PIL  import Image, ImageEnhance
+from PIL  import Image, ImageEnhance, ImageFilter
 
 IMAGE_DIR = "./"
 TRAIN_SIZE = 75
@@ -24,12 +24,12 @@ def split_train_test(train_size:int, contrast_factor, sharpness_factor, color_fa
     test  = []
     train_answers = []
     test_answers  = []
-    '''
-    contrast_factor   =  4
-    sharpness_factor  =  2
-    color_factor      =  1
-    brightness_factor =  2
-    '''
+    
+    contrast_factor   =  0.8
+    sharpness_factor  =  1.6
+    color_factor      =  0
+    brightness_factor =  1.6
+    
     supported_extensions = ['.jpg', '.jpeg', '.png']
 
     density_classes = ["1", "2", "3", "4"]
@@ -40,7 +40,7 @@ def split_train_test(train_size:int, contrast_factor, sharpness_factor, color_fa
         for i in tmp_train:
 
             image       =  Image.open(f"{IMAGE_DIR}/{density_class}/{i}")
-            
+            image = image.filter(ImageFilter.GaussianBlur(radius=1))
             enhancer_sharpness = ImageEnhance.Sharpness(image)
             image = enhancer_sharpness.enhance(sharpness_factor)
             enhancer_contrast = ImageEnhance.Contrast(image)
@@ -49,22 +49,25 @@ def split_train_test(train_size:int, contrast_factor, sharpness_factor, color_fa
             image= enhancer_color.enhance(color_factor)
             enhancer_brightness = ImageEnhance.Brightness(image)
             image= enhancer_color.enhance(brightness_factor)
-
+            
+            
             image = np.asarray(image.quantize(32))
-            glcm        =  graycomatrix(image, [1, 2, 4, 8, 16], [0, np.pi/8, np.pi/4, 3*np.pi/8, np.pi/2, 5*np.pi/8, 3*np.pi/4, 7*np.pi/8], levels=32)
+            
+            glcm          =  graycomatrix(image, [1, 2, 4, 8, 16], [0, np.pi/8, np.pi/4, 3*np.pi/8, np.pi/2, 5*np.pi/8, 3*np.pi/4, 7*np.pi/8], levels=32)
             energy        =  graycoprops(glcm, 'energy')
             homogeneity   =  graycoprops(glcm, 'homogeneity')
             dissimilarity =  graycoprops(glcm, 'dissimilarity')
             correlation   =  graycoprops(glcm, 'correlation')
             entropy       =  shannon_entropy(glcm, base=2)
 
-            tmp = np.concatenate((energy, homogeneity, entropy, correlation, dissimilarity), axis=None)
+            tmp = np.concatenate((energy, homogeneity, entropy, correlation), axis=None)
             train.append(tmp)
             train_answers.append(f"{density_class}")
-        
+
         for i in tmp_test:
-            image       =  Image.open(f"{IMAGE_DIR}/{density_class}/{i}")
             
+            image       =  Image.open(f"{IMAGE_DIR}/{density_class}/{i}")
+            image = image.filter(ImageFilter.GaussianBlur(radius=50))
             enhancer_sharpness = ImageEnhance.Sharpness(image)
             image = enhancer_sharpness.enhance(sharpness_factor)
             enhancer_contrast = ImageEnhance.Contrast(image)
@@ -73,9 +76,10 @@ def split_train_test(train_size:int, contrast_factor, sharpness_factor, color_fa
             image= enhancer_color.enhance(color_factor)
             enhancer_brightness = ImageEnhance.Brightness(image)
             image= enhancer_color.enhance(brightness_factor)
-
+            
+            
             image = np.asarray(image.quantize(32))
-
+            
             glcm        =  graycomatrix(image, [1, 2, 4, 8, 16], [0, np.pi/8, np.pi/4, 3*np.pi/8, np.pi/2, 5*np.pi/8, 3*np.pi/4, 7*np.pi/8], levels=32)
             energy        =  graycoprops(glcm, 'energy')
             homogeneity   =  graycoprops(glcm, 'homogeneity')
@@ -83,68 +87,25 @@ def split_train_test(train_size:int, contrast_factor, sharpness_factor, color_fa
             correlation   =  graycoprops(glcm, 'correlation')
             entropy       =  shannon_entropy(glcm, base=2)
 
-            tmp = np.concatenate((energy, homogeneity, entropy, correlation, dissimilarity), axis=None)
+            tmp = np.concatenate((energy, homogeneity, entropy, correlation), axis=None)
 
             test.append(tmp)
             test_answers.append(f"{density_class}")
 
     return train, test, train_answers, test_answers
 
-valid_contrast = []
-valid_sharpness= []
-valid_color    = []
-valid_bright   = []
+train, test, train_answers, test_answers = split_train_test(TRAIN_SIZE, 1, 1, 1, 1)
 
+clf = svm.SVC(kernel="linear")
+clf.fit(train, train_answers)
 
-for i in range(0, 500, 25):
-    valid_contrast.append(i/100)
-    valid_sharpness.append(i/100)
-    valid_color.append(i/100)
-    valid_bright.append(i/100)
+prediction = clf.predict(test)
 
-top = []
-dict_top = {}
-VALORES_TOP = 15
+accuracy = sklearn.metrics.accuracy_score(test_answers, prediction)
 
-for i in valid_contrast:
-    for j in valid_sharpness:
-        for k in valid_color:
-            for v in valid_bright:
-                print(f"contrast = {i} -- sharp = {j} -- color = {k} -- bright = {v}\n")
-                
-                medias_accuracia = np.array([], dtype=np.float64)
+print(accuracy)
 
-                for l in range(0,5):
-                    train, test, train_answers, test_answers = split_train_test(TRAIN_SIZE, 1, 1, 1, 1)
-
-                    clf = svm.SVC(kernel="linear")
-                    clf.fit(train, train_answers)
-
-                    prediction = clf.predict(test)
-
-                    accuracy = sklearn.metrics.accuracy_score(test_answers, prediction)
-                    if accuracy not in medias_accuracia:
-                        medias_accuracia = np.append(medias_accuracia, accuracy)
-                    
-                medias_accuracia = medias_accuracia.mean()
-
-                if(len(top) < VALORES_TOP):
-                    top.append(medias_accuracia)
-                    dict_top[medias_accuracia] = f"contrast = {i} -- sharp = {j} -- color = {k} -- bright = {v}\n"
-                else:
-                    for j in range(0, VALORES_TOP-1):
-                        if i > top[j]:
-                            dict_top[top[j]] = f"contrast = {i} -- sharp = {j} -- color = {k} -- bright = {v}\n"
-                            top[j] = i
-                            top.sort()
-                            break
-
-                    print(f"Accuracy = {accuracy}")
-
-for i in dict_top:
-    print(f"{i} = {dict_top[i]}")
-'''
-print(f"Matriz de confusão = {confusion_matrix}")
+confusion_matrix = sklearn.metrics.confusion_matrix(test_answers, prediction)
 
 plt.matshow(confusion_matrix, fignum="int")
 
@@ -156,4 +117,3 @@ plt.text(0.5, -1, f"Accuracy = {accuracy}", ha='center', va='center', fontsize=1
             bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3'))
 
 plt.show()
-'''
