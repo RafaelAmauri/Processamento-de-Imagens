@@ -1,0 +1,24 @@
+\section{Bibliotecas utilizadas}
+
+Para o desenvolvimento do projeto foi utilizada a linguagem Python3,
+que pode ser instalada pelo site da linguagem. Complementando a linguagem 
+em si, foram utilizadas as bibliotecas PySimpleGUI (PYSIMPLEGUI) 
+Pillow (PILLOW), Numpy (NUMPY), 
+Scikit-Image (SCIKIT-IMAGE), Matplotlib (MATPLOTLIB) 
+e Scikit-learn (SCIKIT-LEARN). A biblioteca PySimpleGUI pode 
+ser instalada com o comando \fbox{pip3 install PySimpleGUI} e foi utilizada para o desenvolvimento 
+da interface gráfica e também tem como objetivo permitir o usuário definir certos parâmetros da 
+aplicação como a quantidade de aumento do contraste, brilho, sharpness, quantidade de tons de cinza 
+e a intensidade da suavização gaussiana das imagens no pré-processamento. A biblioteca Pillow pode 
+ser instalada com o comando \fbox{pip3 install Pillow} e é responsável pela aplicação de todos os 
+filtros e operações realizadas na etapa de pré-processamento, além de também ser responsável por 
+fazer a leitura das imagens do disco. A biblioteca Numpy é instada com o comando \fbox{pip3 install numpy} 
+e foi utilizada principalmente com o objetivo de aumentar a performance da aplicação, uma vez que, 
+para conjuntos massivos de dados, arrays Numpy têm desempenho superior aos arrays normais encontrados 
+no Python3. A biblioteca Scikit-Image pode ser instalada com o comando \fbox{pip3 install scikit-image}
+e ela teve como objetivo gerar as matrizes de co-ocorrência das imagens lidas com a biblioteca Pillow, 
+bem como encontrar os valores para os descritores de textura utilizados. A biblioteca matplotlib pode 
+ser instalada com o comando \fbox{pip3 install matplotlib} e foi utilizada para a geração dos histogramas 
+das imagens e para a criação da imagem da matriz de ocorrência. Por fim, a biblioteca Scikit-Learn pode 
+ser instalada com o comando \fbox{pip3 install scikit-learn}. A biblioteca Scikit-Learn foi utilizada 
+para acessar a implementação da SVM, bem como as funções de treino e classificação que a acompanham.

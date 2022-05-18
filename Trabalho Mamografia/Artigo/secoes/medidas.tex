@@ -1,0 +1,64 @@
+\section{Medidas de tempo de execução para diversas imagens, descritores e hiperparâmetros do
+classificador.}
+
+A \emph{SVM} utilizou os descritores de textura: entropia, energia, homogeneidade, correlação e dissimilaridade.
+
+Para realizar as medições de tempo, foi utilizado um computador com \emph{Linux
+(Arch Linux com a kernel 5.17.7.arch1-2), Python} 3.10.4, um processador \emph{AMD Ryzen 5 
+5600X} e \emph{32 GB} de RAM. As imagens foram armazenadas em um SSD Adata XPG SX8100.
+
+O tempo medido para a etapa de treinamento do modelo teve uma média de 0.005430 segundos.  
+A etapa de separação das imagens nos conjuntos de treino e teste durou, em média, 1.533053 
+segundos. Por fim, a etapa de classificação das imagens no conjunto de teste durou, em média, 0.000656 segundos.
+
+As imagens utilizadas para os testes abaixo foram escolhidas com o objetivo de apresentar 
+os tempos observados para operações em imagens pertencentes às 4 diferentes classes \emph{BI-RADS}. 
+As imagens escolhidas foram: “1/p\_d\_left\_cc(12).png”, “2/p\_e\_left\_cc(144).png”, 
+“3/p\_f\_left\_cc(192).png” e “4/p\_g\_left\_cc(204).png”.
+
+\noindent
+Para a imagem “1/p\_d\_left\_cc(12).png” foram observados os seguintes tempos:
+
+\begin{itemize}
+    \item Pré-processamento da imagem: 0.001435 segundos
+    \item Cálculo das matrizes de co-ocorrências e extração dos descritores: 0.004100 segundos
+    \item Classificação da imagem: 0.004216 segundos
+\end{itemize}
+
+
+\noindent
+Para a imagem “2/p\_e\_left\_cc(144).png” foram observados os seguintes tempos:
+
+\begin{itemize}
+    \item Pré-processamento da imagem: 0.001502 segundos
+    \item Cálculo das matrizes de co-ocorrências e extração dos descritores: 0.004096 segundos
+    \item Classificação da imagem: 0.004209 segundos
+\end{itemize}
+
+
+\noindent
+Para a imagem “3/p\_f\_left\_cc(192).png” foram observados os seguintes tempos:
+
+\begin{itemize}
+    \item Pré-processamento da imagem: 0.001419 segundos
+    \item Cálculo das matrizes de co-ocorrências e extração dos descritores: 0.003937 segundos
+    \item Classificação da imagem: 0.004052 segundos
+\end{itemize}
+
+
+\noindent
+Para a imagem “4/p\_g\_left\_cc(204).png” foram observados os seguintes tempos:
+
+\begin{itemize}
+    \item Pré-processamento da imagem: 0.001329 segundos
+    \item Cálculo das matrizes de co-ocorrências e extração dos descritores: 0.003971 segundos
+    \item Classificação da imagem: 0.004139 segundos
+\end{itemize}
+
+De forma geral, os tempos observados para todas as operações que estão sendo feitas são 
+considerados extremamente satisfatórios. Grande parte desse alto desempenho se deve à 
+melhora do parâmetro \textbf{levels} da função \textbf{graycomatrix} da biblioteca \emph{Scikit-Image}, 
+que está sendo usada para gerar as matrizes de co-ocorrência. Esse parâmetro tem como 
+objetivo realizar diversas otimizações nas matrizes ao saber qual o número máximo de 
+tons de cinza da imagem, e como a imagem foi quantizada para um número específico, é 
+possível saber quantos tons existem na imagem, ganhando desempenho.

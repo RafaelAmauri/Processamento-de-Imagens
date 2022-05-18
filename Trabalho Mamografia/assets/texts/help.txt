@@ -1,0 +1,11 @@
+• Para ler e visualizar imagens use os formatos PNG, JPEG e JPG. As imagens podem ter qualquer resolução e número de tons de cinza.
+
+• Será necessário ler um diretório contendo 4 subdiretórios com os arquivos de imagens, associadas às 4 classes BI-RADS. Os nomes dos subdiretórios devem ser 1, 2, 3, 4 e essas imagens servirão para treinar e testar o classificador.
+
+• Após selecionar a pasta que contém as classes BI-RADS que quer avaliar, será liberado o botão de treinamento do modelo.
+
+• Com o treinamento concluido, todos os botões que faltam serão liberados para identificação das imagens que quiserem ser testadas no classificador.
+
+• Por fim, todas as métricas de tempos de execução e acerto do modelo podem ser obtidas no botão "Obter métricas", bem como a matriz de confusão.
+
+• Nas opções avançadas é possível modificar os parâmetros do modelo de classificação. Tenha em mente que isso pode afetar o desempenho do classificador!

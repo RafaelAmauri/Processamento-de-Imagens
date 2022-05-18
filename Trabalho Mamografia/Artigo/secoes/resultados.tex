@@ -1,0 +1,28 @@
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imagens/matriz-confusao.png}
+    \caption{Exemplo de matriz de confusão para o classificador.}
+\end{figure}
+
+\newpage
+\section{Resultados obtidos nos testes exemplos de erros e acertos dos métodos}
+
+Por conta do menu de opções avançadas, o classificador pode ter diferentes 
+configurações que afetarão o desempenho e a taxa de acerto do modelo. Os 
+resultados encontrados e demonstrados nesta seção são referentes às configurações 
+padrão do classificador: aumento do sharpness das imagens em 40\%, aumento do 
+contraste em 120\%, aumento do brilho em 10\%, reamostragem para 32 cores, 
+suavização gaussiana desligada e 75\% das imagens sendo usadas para o treinamento.
+
+A acurácia média para o classificador tem valor 0.65, com os valores 
+oscilando entre 0.6 e 0.7. A especificidade média tem valor 0.33. 
+Como pode ser visto na figura 2, os maiores erros do modelo são originados 
+da identificação de imagens pertencentes às classes \emph{BI-RADS} 2 e 4. Isso se 
+deve à grande semelhança entre as imagens da classe 3 
+com as do grupo 2 e 4, e isso faz o modelo “acreditar” fortemente que imagens 
+\emph{BI-RADS} pertencentes às classes 2 e 4 pertencem à classe 3. Apesar da etapa de 
+pré-processamento auxiliar significativamente o modelo em diferenciar melhor as 
+classes, ainda existe uma certa dificuldade do classificador em fazer essa 
+distinção. A fim de melhorar o classificador e aumentar a taxa de acerto, 
+seriam necessárias imagens com maior resolução tanto para a etapa de treinamento 
+quanto para a etapa de avaliação do modelo.
