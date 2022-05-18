@@ -96,11 +96,12 @@ class GUI:
                 texto_final += f"Acurácia: {accuracy}\nEspecificidade: {especificidade}"
                 
                 # Imagem da matriz de confusão
-                sg.popup_ok(texto_final, image='./matriz-confusao.png', title='Métricas de Avaliação do Modelo', font=('Helvetica', 16))
+                sg.popup_ok('', image='./matriz-confusao.png', title='Matriz de Confusão')
+                sg.popup_ok(texto_final, title='Métricas de Avaliação do Modelo', font=('Helvetica', 14))
             
             # Abrir opções avançadas
             elif event == menu.keys.OPCOES_AVANCADAS_KEY:
-                acessar_opcoes = sg.popup_ok_cancel('Opções avançadas podem afetar o desempenho do modelo!\nUse com cautela!', title='Aviso!', font=('Helvetica', 16))
+                acessar_opcoes = sg.popup_ok_cancel('Opções avançadas podem afetar o desempenho do modelo!\nUse com cautela!', title='Aviso!', font=('Helvetica', 11))
                 
                 if acessar_opcoes == 'OK':
                     layout_opcoes_avancadas = advanced_options.AdvancedOptions()
@@ -113,12 +114,12 @@ class GUI:
             # Opções avançadas
             elif event == menu.keys.AJUDA_KEY:
                 texto_de_ajuda = utils.read_file('./assets/texts/help.txt')
-                sg.popup_ok(texto_de_ajuda, title='Ajuda', font=('Helvetica', 16))
+                sg.popup_ok(texto_de_ajuda, title='Ajuda', font=('Helvetica', 11))
             
             # Créditos da aplicação
             elif event == menu.keys.CREDITOS_KEY:
                 texto_de_creditos = utils.read_file('./assets/texts/creditos.txt')
-                sg.popup_ok(texto_de_creditos, title='Créditos', font=('Helvetica', 16))
+                sg.popup_ok(texto_de_creditos, title='Créditos', font=('Helvetica', 12))
             
         # Finalizar aplicação e fechar a janela
         window.close()

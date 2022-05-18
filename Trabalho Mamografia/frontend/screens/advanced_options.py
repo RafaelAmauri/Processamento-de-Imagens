@@ -60,22 +60,22 @@ class AdvancedOptions:
     # Init da tela
     def init_tela(self, modelo: classifier.ImageClassifier):
         # Aplicando valores padrão do modelo na tela
-        self.__tela[keys.ADVANCED_OPTIONS_PORCENTAGEM_TREINAMENTO_SLIDER_KEY].update(value=modelo.get_percentage_train())
-        self.__tela[keys.ADVANCED_OPTIONS_GAUSSIAN_MATRIX_SLIDER_KEY].update(value=modelo.get_gaussian_radius())
-        self.__tela[keys.ADVANCED_OPTIONS_SHARPEN_SLIDER_KEY].update(value=modelo.get_sharpness_boost_strength())
-        self.__tela[keys.ADVANCED_OPTIONS_CONTRAST_SLIDER_KEY].update(value=modelo.get_contrast_boost_strength())
-        self.__tela[keys.ADVANCED_OPTIONS_BRIGHTNESS_SLIDER_KEY].update(value=modelo.get_brightness_boost_strength())
-        self.__tela[keys.ADVANCED_OPTIONS_N_COLORS_SLIDER_KEY].update(value=modelo.get_n_colors())
+        self.__tela[keys.ADVANCED_OPTIONS_PORCENTAGEM_TREINAMENTO_SLIDER_KEY].update(value=int(modelo.get_percentage_train()))
+        self.__tela[keys.ADVANCED_OPTIONS_GAUSSIAN_MATRIX_SLIDER_KEY].update(value=float(modelo.get_gaussian_radius()))
+        self.__tela[keys.ADVANCED_OPTIONS_SHARPEN_SLIDER_KEY].update(value=float(modelo.get_sharpness_boost_strength()))
+        self.__tela[keys.ADVANCED_OPTIONS_CONTRAST_SLIDER_KEY].update(value=float(modelo.get_contrast_boost_strength()))
+        self.__tela[keys.ADVANCED_OPTIONS_BRIGHTNESS_SLIDER_KEY].update(value=float(modelo.get_brightness_boost_strength()))
+        self.__tela[keys.ADVANCED_OPTIONS_N_COLORS_SLIDER_KEY].update(value=int(modelo.get_n_colors()))
 
     # Reset os valores da tela para seus valores padrão
     def reset_tela_default_values(self, modelo: classifier.ImageClassifier):
         # Aplicando valores padrão do modelo na tela
-        self.__tela[keys.ADVANCED_OPTIONS_PORCENTAGEM_TREINAMENTO_SLIDER_KEY].update(value=modelo.get_percentage_train())
-        self.__tela[keys.ADVANCED_OPTIONS_GAUSSIAN_MATRIX_SLIDER_KEY].update(value=modelo.get_gaussian_radius())
-        self.__tela[keys.ADVANCED_OPTIONS_SHARPEN_SLIDER_KEY].update(value=modelo.get_sharpness_boost_strength())
-        self.__tela[keys.ADVANCED_OPTIONS_CONTRAST_SLIDER_KEY].update(value=modelo.get_contrast_boost_strength())
-        self.__tela[keys.ADVANCED_OPTIONS_BRIGHTNESS_SLIDER_KEY].update(value=modelo.get_brightness_boost_strength())
-        self.__tela[keys.ADVANCED_OPTIONS_N_COLORS_SLIDER_KEY].update(value=modelo.get_n_colors())
+        self.__tela[keys.ADVANCED_OPTIONS_PORCENTAGEM_TREINAMENTO_SLIDER_KEY].update(value=int(modelo.get_percentage_train()))
+        self.__tela[keys.ADVANCED_OPTIONS_GAUSSIAN_MATRIX_SLIDER_KEY].update(value=float(modelo.get_gaussian_radius()))
+        self.__tela[keys.ADVANCED_OPTIONS_SHARPEN_SLIDER_KEY].update(value=float(modelo.get_sharpness_boost_strength()))
+        self.__tela[keys.ADVANCED_OPTIONS_CONTRAST_SLIDER_KEY].update(value=float(modelo.get_contrast_boost_strength()))
+        self.__tela[keys.ADVANCED_OPTIONS_BRIGHTNESS_SLIDER_KEY].update(value=float(modelo.get_brightness_boost_strength()))
+        self.__tela[keys.ADVANCED_OPTIONS_N_COLORS_SLIDER_KEY].update(value=int(modelo.get_n_colors()))
 
     def construir_tela_opcoes_avancadas(self, modelo: classifier.ImageClassifier):
         self.__tela = sg.Window('Opções avançadas', self._build_layout(), resizable=False, font=('Helvetica', 16), finalize=True)
@@ -93,10 +93,10 @@ class AdvancedOptions:
             elif event == keys.ADVANCED_OPTIONS_CONFIRM_MODIFICATIONS_KEY:
                 # Aplicar efeitos                
                 modelo.set_percentage_train(int(values[keys.ADVANCED_OPTIONS_PORCENTAGEM_TREINAMENTO_SLIDER_KEY]))
-                modelo.set_gaussian_radius(values[keys.ADVANCED_OPTIONS_GAUSSIAN_MATRIX_SLIDER_KEY])
-                modelo.set_sharpness_boost_strength(values[keys.ADVANCED_OPTIONS_SHARPEN_SLIDER_KEY])
-                modelo.set_contrast_boost_strength(values[keys.ADVANCED_OPTIONS_CONTRAST_SLIDER_KEY])
-                modelo.set_brightness_boost_strength(values[keys.ADVANCED_OPTIONS_BRIGHTNESS_SLIDER_KEY])
+                modelo.set_gaussian_radius(float(values[keys.ADVANCED_OPTIONS_GAUSSIAN_MATRIX_SLIDER_KEY]))
+                modelo.set_sharpness_boost_strength(float(values[keys.ADVANCED_OPTIONS_SHARPEN_SLIDER_KEY]))
+                modelo.set_contrast_boost_strength(float(values[keys.ADVANCED_OPTIONS_CONTRAST_SLIDER_KEY]))
+                modelo.set_brightness_boost_strength(float(values[keys.ADVANCED_OPTIONS_BRIGHTNESS_SLIDER_KEY]))
                 modelo.set_n_colors(int(values[keys.ADVANCED_OPTIONS_N_COLORS_SLIDER_KEY]))
                 
                 # Fechar a janela
