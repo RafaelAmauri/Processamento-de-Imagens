@@ -54,10 +54,13 @@ Para a imagem “4/p\_g\_left\_cc(204).png” foram observados os seguintes temp
     \item Classificação da imagem: 0.004139 segundos
 \end{itemize}
 
-A \emph{SVM} utilizou os descritores de textura: entropia, energia, homogeneidade, correlação e dissimilaridade. Os hiperparâmetros
-utilzados no classificador foram uma kernel linear e o valor do parâmetro de regularização igual a 1.4. Os tempos testados tanto para outros
-valores de kernel quanto para outros valores do parâmetro de regularização não se mostraram significativamente diferentes dos apresentados
-anteriormente. Os outros parâmetros testados foram a kernel "rbf", "poly" e "sigmoid", e valores no intervalo entre 0.5 e 2.5 para 
+A \emph{SVM} utilizou os descritores de textura: entropia, energia, homogeneidade, correlação e dissimilaridade. Testes feitos com outros descritores
+de textura não afetaram o tempo de execução de forma significativa (aproximadamente 10\% a mais de tempo de execução para cada descritor adicionado),
+mas afetaram negativamente a acurácia do modelo. Por este motivo, foi decidido manter apenas os descritores citados anteriormente.
+
+Os hiperparâmetros utilizados no classificador foram uma kernel linear e o valor do parâmetro de regularização igual a 1.4. Os tempos 
+testados tanto para outros valores de kernel quanto para outros valores do parâmetro de regularização não se mostraram diferentes dos 
+apresentados anteriormente. Os outros parâmetros testados foram a kernel "rbf", "poly" e "sigmoid", e valores no intervalo entre 0.5 e 2.5 para 
 o parâmetro de regularização.
 
 De forma geral, os tempos observados para todas as operações que estão sendo feitas são 
