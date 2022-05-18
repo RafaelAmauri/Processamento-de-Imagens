@@ -1,7 +1,6 @@
 \section{Medidas de tempo de execução para diversas imagens, descritores e hiperparâmetros do
 classificador.}
 
-A \emph{SVM} utilizou os descritores de textura: entropia, energia, homogeneidade, correlação e dissimilaridade.
 
 Para realizar as medições de tempo, foi utilizado um computador com \emph{Linux
 (Arch Linux com a kernel 5.17.7.arch1-2), Python} 3.10.4, um processador \emph{AMD Ryzen 5 
@@ -54,6 +53,12 @@ Para a imagem “4/p\_g\_left\_cc(204).png” foram observados os seguintes temp
     \item Cálculo das matrizes de co-ocorrências e extração dos descritores: 0.003971 segundos
     \item Classificação da imagem: 0.004139 segundos
 \end{itemize}
+
+A \emph{SVM} utilizou os descritores de textura: entropia, energia, homogeneidade, correlação e dissimilaridade. Os hiperparâmetros
+utilzados no classificador foram uma kernel linear e o valor do parâmetro de regularização igual a 1.4. Os tempos testados tanto para outros
+valores de kernel quanto para outros valores do parâmetro de regularização não se mostraram significativamente diferentes dos apresentados
+anteriormente. Os outros parâmetros testados foram a kernel "rbf", "poly" e "sigmoid", e valores no intervalo entre 0.5 e 2.5 para 
+o parâmetro de regularização.
 
 De forma geral, os tempos observados para todas as operações que estão sendo feitas são 
 considerados extremamente satisfatórios. Grande parte desse alto desempenho se deve à 
