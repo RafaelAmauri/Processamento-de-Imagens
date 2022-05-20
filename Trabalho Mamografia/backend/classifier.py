@@ -83,7 +83,7 @@ class ImageClassifier:
         self.__sharpness_boost_strength  = 1.4
         self.__contrast_boost_strength   = 2.2
         self.__brightness_boost_strength = 1.1
-        self.__percentage_train = 75
+        self.__percentage_train = 0.75
 
         self.__runtime_metrics = {}
 
@@ -152,7 +152,7 @@ class ImageClassifier:
         return self.__brightness_boost_strength
 
     def set_percentage_train(self, percentage: int):
-        self.__percentage_train = percentage
+        self.__percentage_train = percentage/100
     
     def get_percentage_train(self):
         return self.__percentage_train

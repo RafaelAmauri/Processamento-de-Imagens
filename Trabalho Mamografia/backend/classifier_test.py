@@ -24,7 +24,8 @@ EXTRAS:
     classifier.predict_test_images()     -> Prediz a classe BIRADS das imagens de teste
     classifier.predict_single_image(str) -> Prediz a classe BIRADS de uma única imagem
     classifier.get_runtime_metrics()     -> Retorna os tempos de execução medidos para cada função
-    classifier.set_model_kernel(str)     -> Define a kernel utilizada pelo modelo
+
+EXISTEM MUITO MAIS FUNCIONALIDADES! OLHAR backend/classifier.py!!
  '''
  
 classifier.set_images_dir("../Imagens")
@@ -37,12 +38,7 @@ classifier.split_train_test()
 
 classifier.train_model()
 classifier.predict_single_image(f"{os.getcwd()}/../Imagens/1/p_d_left_cc(12).png")
-#classifier.preview_singe_image("1/p_d_left_cc(12).png")
 classifier.predict_test_images()
-# print(classifier.get_prediction_metrics())
+print(classifier.get_prediction_metrics())
 
-# print(classifier.get_runtime_metrics())
-
-classifier.get_single_image_histogram(f"{os.getcwd()}/../Imagens/1/p_d_left_cc(12).png")
-
-#classifier.get_single_image_histogram("1/p_d_left_cc(12).png")
+print(classifier.get_runtime_metrics())
