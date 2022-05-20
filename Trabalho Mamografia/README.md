@@ -5,7 +5,9 @@
 Desenvolvedores:
 
 [Lucas Santiago](https://github.com/LucasSnatiago "Lucas Santiago")
+
 Rafael Amauri (eu :D)
+
 [Thiago Henriques](https://github.com/ThiagoHN "Thiago Henriques")
 
 ### DISCLAIMER
