@@ -155,7 +155,7 @@ class ImageClassifier:
         self.__percentage_train = percentage/100
     
     def get_percentage_train(self):
-        return self.__percentage_train
+        return self.__percentage_train*100
 
     def set_images_dir(self, dir: str):
         self.__images_dir = dir
