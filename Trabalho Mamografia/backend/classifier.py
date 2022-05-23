@@ -295,7 +295,7 @@ class ImageClassifier:
         for density_class in density_classes:
             path_images = [f for f in os.listdir(f"{self.get_images_dir()}/{density_class}") if f.endswith(tuple(self.get_supported_img_extensions()))]
             
-            tmp_train, tmp_test = train_test_split(path_images, train_size=self.get_percentage_train(), shuffle=True)
+            tmp_train, tmp_test = train_test_split(path_images, train_size=self.get_percentage_train()/100, shuffle=True)
 
             # Para cada imagem no conjunto de treino, extrair os descritores de textura abaixo e concatená-los
             # ao conjunto de treino
