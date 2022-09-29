@@ -4,11 +4,11 @@
 
 Desenvolvedores:
 
-[Lucas Santiago](https://github.com/LucasSnatiago "Lucas Santiago")
+[Lucas Santiago](https://github.com/LucasSnatiago "Lucas Santiago"): Front-End
 
-Rafael Amauri (eu :D)
+Rafael Amauri (eu :D): Back-End
 
-[Thiago Henriques](https://github.com/ThiagoHN "Thiago Henriques")
+[Thiago Henriques](https://github.com/ThiagoHN "Thiago Henriques"): Documentaç
 
 
 ### ⚠️ Aviso
